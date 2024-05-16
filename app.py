@@ -10,7 +10,7 @@ app.config['MQTT_BROKER_URL'] = 'localhost'
 app.config['MQTT_BROKER_PORT'] = 1883
 # app.config['MQTT_USERNAME'] = ''  # Set this item when you need to verify username and password
 # app.config['MQTT_PASSWORD'] = ''  # Set this item when you need to verify username and password
-app.config['MQTT_KEEPALIVE'] = 5  # Set KeepAlive time in seconds
+#app.config['MQTT_KEEPALIVE'] = 5  # Set KeepAlive time in seconds
 app.config['MQTT_TLS_ENABLED'] = False  # If your broker supports TLS, set it True
 topic = 'test'
 
@@ -35,6 +35,8 @@ def handle_mqtt_message(client, userdata, message):
        payload=message.payload.decode()
   )
    print('Received message on topic: {topic} with payload: {payload}'.format(**data))
+
+
 
 ############
 # FLASK CODE
