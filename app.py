@@ -1,6 +1,9 @@
 from flask import Flask, render_template, send_from_directory
 import sqlite3
 from flask_mqtt import Mqtt
+from dotenv import dotenv_values # https://blog.gitguardian.com/how-to-handle-secrets-in-python/
+
+mqtt_credentials = dotenv_values(".env")
 
 app = Flask(__name__, template_folder="www")
 db_location = 'station.db'
@@ -8,8 +11,8 @@ db_location = 'station.db'
 # flask_mqtt config
 app.config['MQTT_BROKER_URL'] = 'localhost'
 app.config['MQTT_BROKER_PORT'] = 1883
-# app.config['MQTT_USERNAME'] = ''  # Set this item when you need to verify username and password
-# app.config['MQTT_PASSWORD'] = ''  # Set this item when you need to verify username and password
+app.config['MQTT_USERNAME'] = mqtt_credentials["MQTT_USERNAME"]  # Set this item when you need to verify username and password
+app.config['MQTT_PASSWORD'] = mqtt_credentials["MQTT_PASSWORD"]  # Set this item when you need to verify username and password
 app.config['MQTT_KEEPALIVE'] = 5  # Set KeepAlive time in seconds
 app.config['MQTT_TLS_ENABLED'] = False  # If your broker supports TLS, set it True
 topic = 'test'
