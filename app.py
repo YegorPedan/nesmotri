@@ -26,10 +26,10 @@ mqtt_client = Mqtt(app)
 @mqtt_client.on_connect()
 def handle_connect(client, userdata, flags, rc):
     if rc == 0:
-        print('Connected successfully')
+        print('MQTT: Connected successfully.')
         mqtt_client.subscribe(topic)  # subscribe topic
     else:
-        print('Bad connection. Code:', rc)
+        print('MQTT: Bad connection. Code:', rc)
 
 
 @mqtt_client.on_message()
@@ -38,7 +38,7 @@ def handle_mqtt_message(client, userdata, message):
         topic=message.topic,
         payload=message.payload.decode()
     )
-    print('Received message on topic: {topic} with payload: {payload}'.format(**data))
+    print('MQTT: Received message on topic: {topic} with payload: {payload}'.format(**data))
 
 
 ############
@@ -66,7 +66,6 @@ def get_phones_data():
         phones_data += {("NULL", "danger", "База данных пуста")}
     else:
         for row in phones_fetch:
-            print(row)
             if row[1] == 1:
                 sec = row[2]
                 time = ""
@@ -90,7 +89,7 @@ def get_phones_data():
                 time = "Пусто"
             phones_data += {(row[0], "success" if row[1] == 1 else ("secondary" if row[1] == 0 else "danger"), time)}
 
-    print(phones_data)
+    print('Phones data: ', phones_data)
     return phones_data
 
 
