@@ -3,16 +3,16 @@ import sqlite3
 from flask_mqtt import Mqtt
 from dotenv import dotenv_values # https://blog.gitguardian.com/how-to-handle-secrets-in-python/
 
-mqtt_credentials = dotenv_values(".env")
+mqtt_variables = dotenv_values(".env")
 
 app = Flask(__name__, template_folder="www")
 db_location = 'station.db'
 
 # flask_mqtt config
-app.config['MQTT_BROKER_URL'] = 'localhost'
-app.config['MQTT_BROKER_PORT'] = 1883
-app.config['MQTT_USERNAME'] = mqtt_credentials["MQTT_USERNAME"]  # Set this item when you need to verify username and password
-app.config['MQTT_PASSWORD'] = mqtt_credentials["MQTT_PASSWORD"]  # Set this item when you need to verify username and password
+app.config['MQTT_BROKER_URL'] = mqtt_variables["MQTT_BROKER_URL"]
+app.config['MQTT_BROKER_PORT'] = int(mqtt_variables["MQTT_BROKER_PORT"])
+app.config['MQTT_USERNAME'] = mqtt_variables["MQTT_USERNAME"]  # Set this item when you need to verify username and password
+app.config['MQTT_PASSWORD'] = mqtt_variables["MQTT_PASSWORD"]  # Set this item when you need to verify username and password
 app.config['MQTT_KEEPALIVE'] = 5  # Set KeepAlive time in seconds
 app.config['MQTT_TLS_ENABLED'] = False  # If your broker supports TLS, set it True
 topic = 'test'
@@ -49,11 +49,19 @@ def main_page():  # put application's code here
     return render_template('index.html', phones_data=get_phones_data())
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return app.redirect("https://mospolytech.ru/favicon.ico", code=302)
+
+
 @app.route('/assets/<path:path>')
 def assets(path):
     return send_from_directory('www/assets', path)
 
 
+###########
+# FUNCTIONS
+###########
 def get_phones_data():
     conn = sqlite3.connect(db_location)
     c = conn.cursor()
