@@ -1,44 +1,36 @@
 from flask import Flask, render_template, send_from_directory
+from paho.mqtt import client as mqtt_client
+from mqtt_config_secret import MQTT_USERNAME, MQTT_PASSWORD, MQTT_BROKER_URL, MQTT_BROKER_PORT, MQTT_TOPIC
+from threading import Thread
 import sqlite3
-from flask_mqtt import Mqtt
-from dotenv import dotenv_values # https://blog.gitguardian.com/how-to-handle-secrets-in-python/
-
-mqtt_variables = dotenv_values(".env")
+import random
 
 app = Flask(__name__, template_folder="www")
 db_location = 'station.db'
-
-# flask_mqtt config
-app.config['MQTT_BROKER_URL'] = mqtt_variables["MQTT_BROKER_URL"]
-app.config['MQTT_BROKER_PORT'] = int(mqtt_variables["MQTT_BROKER_PORT"])
-app.config['MQTT_USERNAME'] = mqtt_variables["MQTT_USERNAME"]  # Set this item when you need to verify username and password
-app.config['MQTT_PASSWORD'] = mqtt_variables["MQTT_PASSWORD"]  # Set this item when you need to verify username and password
-app.config['MQTT_KEEPALIVE'] = 5  # Set KeepAlive time in seconds
-app.config['MQTT_TLS_ENABLED'] = False  # If your broker supports TLS, set it True
-topic = 'test'
-
-mqtt_client = Mqtt(app)
+paho_client_id = f'webserver-{random.randint(0, 1000)}'
 
 
 ################
-# FLASK_MQTT CODE
+# PAHO-MQTT CODE
 ################
-@mqtt_client.on_connect()
-def handle_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print('MQTT: Connected successfully.')
-        mqtt_client.subscribe(topic)  # subscribe topic
-    else:
-        print('MQTT: Bad connection. Code:', rc)
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
 
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    client.subscribe(MQTT_TOPIC)
 
-@mqtt_client.on_message()
-def handle_mqtt_message(client, userdata, message):
-    data = dict(
-        topic=message.topic,
-        payload=message.payload.decode()
-    )
-    print('MQTT: Received message on topic: {topic} with payload: {payload}'.format(**data))
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+    print("["+str(msg.qos)+"] "+msg.topic+" "+msg.payload.decode('utf-8'))
+
+def run_mqtt_client():
+    client = mqtt_client.Client(paho_client_id)
+    client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect(MQTT_BROKER_URL, MQTT_BROKER_PORT)
+    client.loop_forever()
 
 
 ############
@@ -102,4 +94,6 @@ def get_phones_data():
 
 
 if __name__ == '__main__':
+    mqtt_thread = Thread(target=run_mqtt_client)
+    mqtt_thread.start()
     app.run(host="0.0.0.0", port=5000)
