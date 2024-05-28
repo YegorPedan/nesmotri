@@ -80,14 +80,14 @@
 
                             <!-- This is where cycle with cards starts. -->
                             {% for i in phones_data %}
-                            <div class="card text-white bg-{{ i[1] }} shadow">
+                            <div class="card text-white bg-primary shadow">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-auto">
                                             <p class="m-0 fw-bold">{{ i[0] }}</p>
                                         </div>
                                         <div class="col">
-                                            <p class="text-white-50 m-auto">{{ i[2] }}</p>
+                                            <p class="text-white-50 m-auto"><b>{{ i[1] }}</b>, <b>{{ i[2] }}</b>, заряд: <b>{{ i[3] }}</b>, время подкл./откл.: <b>{{ i[4] }} &#8594 {{ i[5] }}</b>.</p>
                                         </div>
                                     </div>
                                 </div>

@@ -3,6 +3,6 @@
 .idea/
 __pycache__/
 # Ignore the secrets files
-mqtt_config_secret.py
+secret_imap.py
 *.crt
 *.key
