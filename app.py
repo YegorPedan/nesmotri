@@ -5,7 +5,7 @@ import sqlite3
 import json
 
 app = Flask(__name__, template_folder="www")
-db_location = 'station.db'
+db_location = '/var/www/PD_Vlad/station.db'
 
 
 ############
@@ -13,16 +13,20 @@ db_location = 'station.db'
 ############
 @app.route('/')
 def main_page():  # put application's code here
+    iserr = ""
+    cards_background = "primary"
     try:
         with MailBox(IMAP_URL).login(EMAIL_LOGIN, EMAIL_PASSWORD, 'inbox') as mailbox:
-            for msg in mailbox.fetch(AND(seen=False)):
+            for msg in mailbox.fetch(AND(seen=False), reverse=True):
                 temp_data = json.loads(msg.text.strip())
                 temp_data = temp_data[0]
-                # print("MESSAGE: ", temp_data)
+                # print("GOT IMAP MESSAGE: ", temp_data)
                 save_data(temp_data)
     except Exception as e:
-        print(f"An error occurred while connecting to the mailbox: {e}")
-    return render_template('index.html', phones_data=get_data())
+        iserr = f"An error occurred while connecting to the mailbox: {e}"
+        cards_background = "danger"
+        # print(f"An ACTUAL ERROR occurred while connecting to the mailbox: {e}")
+    return render_template('index.html', phones_data=get_data(), iserr=iserr, cards_background=cards_background)
 
 
 @app.route('/favicon.ico')
@@ -43,6 +47,7 @@ def save_data(data):
     c = conn.cursor()
     c.execute("INSERT OR REPLACE INTO phones VALUES (?, ?, ?, ?, ?, ?)", (
     data['id'], data['name'], data['model'], data['charge'], data['connection_time'], data['disconnection_time']))
+    # print("SAVED DATA: ", data)
     conn.commit()
     conn.close()
 
