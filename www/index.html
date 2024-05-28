@@ -16,7 +16,7 @@
             <div id="content">
                 <div class="container-fluid" style="margin-top: 24px;">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0">Станция для борьбы с самураями</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#tech_button"><i class="fas fa-sync fa-sm text-white-50"></i>&nbsp;Техникал рефресш</a>
+                        <h3 class="text-dark mb-0">Станция для борьбы с информационной зависимостью</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#tech_button"><i class="fas fa-sync fa-sm text-white-50"></i>&nbsp;Техникал рефресш</a>
                     </div>
                     <div class="row">
                         <div class="col-md-3 col-xl-3 mb-4">
@@ -25,7 +25,7 @@
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
                                             <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Телефонов внутри</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>4</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span>Много</span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-mobile-alt fa-2x text-gray-300"></i></div>
                                     </div>
@@ -38,7 +38,7 @@
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
                                             <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Время внутри</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>1 час 15 минут и 34 секунды</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span>Долго</span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-hourglass-half fa-2x text-gray-300"></i></div>
                                     </div>
@@ -50,8 +50,8 @@
                                 <div class="card-body">
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
-                                            <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Последнее обновление</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>18 минут назад</span></div>
+                                            <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Ссылка</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span><a href="http://station.hopto.org/">Первый сайт</a></span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-rss fa-2x text-gray-300"></i></div>
                                     </div>
@@ -80,7 +80,7 @@
 
                             <!-- This is where cycle with cards starts. -->
                             {% for i in phones_data %}
-                            <div class="card text-white bg-primary shadow">
+                            <div class="card text-white bg-{{ cards_background }} shadow">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-auto">
@@ -102,7 +102,7 @@
             </div>
             <footer class="bg-white sticky-footer mt-5">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Moscow Polytechnic University 2024<br>Vladislav Zhlobinsky &amp; Bootstrap</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © Moscow Polytechnic University 2024<br>Vladislav Zhlobinsky &amp; Bootstrap<br>{{ iserr }}</span></div>
                 </div>
             </footer>
         </div>
