@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "mospolytech-station-website"
+version = "0.1.0"
+description = ""
+authors = ["egorpedan <wzxv_@outlook.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.0.3"
+paho-mqtt = ">=2.1.0,<2.2.0"
+imap-tools = "^1.7.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
